@@ -1,0 +1,19 @@
+subject 	          [ˈsʌbdʒekt] 			主体
+principal		  [ˈprɪnsəpəl]			身份信息
+credential                [krɪˈdɛnʃəl]			凭证信息 
+spring security           [səˈkjʊrəti]			spring安全框架
+Authentication		  [ɔ:ˌθentɪ'keɪʃn]		身份认证/登录
+Authorization		  [ˌɔ:θərəˈzeɪʃn]		授权
+Cryptography		  [krɪpˈɑ:grəfi]		加密 			
+Concurrency		  [kən'kʌrənsɪ]			并发
+realms			  [relm]			领域
+authorzing
+
+
+
+
+
+
+
+
+

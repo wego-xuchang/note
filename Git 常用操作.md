@@ -116,10 +116,31 @@ git commit -m "message"
 git branch -a
 ```
 
+新建分支
+
+```java
+git checkout -b 分支名
+git push --set-upstream origin 分支名
+```
+
 删除远程库中不存在的分支
 
 ```java
 git remote prune origin
+```
+
+删除分支
+
+```ajva
+git branch -d 分支名 #如果分支没有被合并会删除失败
+git branch -D 分支名 #即使分支没有被合并也会删除
+```
+
+重命名分支
+
+```java
+git branch -m <branchname> <newname> #不会覆盖存在的同名分支
+git branch -M <branchname> <newname> #会覆盖存在的同名分支
 ```
 
 更新origin索引

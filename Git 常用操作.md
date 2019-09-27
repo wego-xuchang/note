@@ -1,0 +1,170 @@
+## Git 常用操作
+
+初始化
+
+全局变量
+
+```java
+git config --global user.name "name"
+git config --global user.eamil "user@user.com"
+git config --list
+```
+
+初始化新版本库：
+
+```java
+git init #只会在根目录下创建一个.git文件
+```
+
+设置忽略文件：
+
+设置每个人想要忽略的文件
+
+- 在根目录下新建一个名为.gitignore的文本文件
+
+```java
+echo *.jpg>.gitignore
+```
+
+- 将.gitignore文件加入版本库并提交
+
+设置只有自己忽略的文件
+
+- 修改.git/info/exclude文件
+
+- 可使用正则
+
+  *.[oa] 等价于 *.o and *.a
+
+添加新文件到版本库
+
+- 添加单个文件
+
+  ```
+  git add a.txt
+  ```
+
+- 添加所有类型文件
+
+  ```java
+  git add *.类型
+  ```
+
+- 添加所有文件
+
+  ```java
+  git add .
+  ```
+
+提交
+
+```java
+git commit -m "message"
+```
+
+撤销
+
+- 撤销提交
+
+  反转提交（反转最近一次提交）
+
+  ```java
+  相当于提交最近的一次提交的反操作
+  git revert --no-commit head
+  ```
+
+  复位
+
+  取消暂存
+
+  ```java
+  git reset head 或 git reset head <filename>
+  ```
+
+  复位到head之前的版本
+
+  ```java
+  git reset --head head^^
+  ```
+
+查看状态
+
+- 查看当前状态
+
+  ```java
+  git status
+  ```
+
+- 历史记录
+
+  ```java
+  git log #历史记录
+  gitk #查看当前分支的历史记录
+  gitk <branchname> #查看某一分支
+  gitk --all #查看所有分支
+  ```
+
+- 每个分支最后的提交
+
+  ```java
+  git branch -v
+  ```
+
+查看远程分支 
+
+```java
+git branch -a
+```
+
+删除远程库中不存在的分支
+
+```java
+git remote prune origin
+```
+
+更新origin索引
+
+如果看不到新建的远程分支，可以先用git fetch命令，更新origin索引
+
+```java
+git fetch
+```
+
+查看本地分支
+
+```java
+git branch
+```
+
+切换分支
+
+git checkout -b v0.9rc1 origin/v0.9rc1
+
+推入远程库
+
+```java
+git push origin master #远程的master不能是当前分支
+```
+
+从远程库获取
+
+- 获取但不合并
+
+  ```java
+  git fetch <远程库名称>
+  ```
+
+- 获取并合并到当前本地分支
+
+  ```java
+  git pull 等价于 git pull origin
+  ```
+
+克隆版本库
+
+```java
+git clone -b <分支> URL
+```
+
+
+

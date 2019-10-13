@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<!-- 配置Struts2的常量 -->
+	<constant name="struts.action.extension" value="action"></constant>
+	<constant name="struts.enable.DynamicMethodInvocation"  value="true"></constant>
+	
+	<package name="maven"  extends="struts-default" namespace="/">
+	
+		<action name="customer_*" class="customerAction" method="{1}">
+			<result name="list">/list.jsp</result>
+		</action>
+		<!-- 通配符方式 -->
+		<!-- 
+		<action name="customer2_*" class="customerAction2" method="{1}">
+			<result name="register">/index.jsp</result>
+		</action> 
+		<action name="*_*" class="{1}" method="{2}">
+			<result name="register">/index.jsp</result>
+		</action> 
+		-->
+		<!-- 普通 -->
+		<!-- <action name="customer2_saveRegister" class="customerAction2" method="saveRegister">
+			<result name="register">/index.jsp</result>
+		</action> -->
+		<!-- 动态方法 -->
+		<action name="customer" class="customerAction2">
+		<!-- type:结果页面 chain:请求转发到action  dispatcher请求转发到jsp redirectAction重定向到action  redirect重定向到URL-->
+			<result name="register">/index.jsp</result>
+		</action>
+	</package>
+</struts>

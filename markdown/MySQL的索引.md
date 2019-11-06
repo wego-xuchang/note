@@ -379,7 +379,8 @@ SELECT * FROM tablename MATCH(index_colum) ANGAINST(‘word’);
    （2） count(字段) 会统计该字段在表中出现的次数，忽略字段为null 的情况。即不统计字段为null 的记录。 
 
 
-count(*) 和 count(1)和count(列名)区别  
+
+#### count(*) 和 count(1)和count(列名)区别  
 
 执行效果上：  
 count(*)包括了所有的列，相当于行数，在统计结果的时候，不会忽略列值为NULL  

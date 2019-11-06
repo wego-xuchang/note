@@ -1,7 +1,5 @@
 ## https和http的主要区别
 
-![img](https://timg01.bdimg.com/timg?pacompress&imgtype=1&sec=1439619614&autorotate=1&di=ddf3f9e189f029b82afdb1ae67bd262e&quality=100&size=b200_10001&cut_x=0&cut_y=0&cut_w=200&cut_h=200&src=http%3A%2F%2Fpic.rmb.bdstatic.com%2F220907800a1ea1da78cef0042d083740.jpeg)
-
 **HTTPS和HTTP的区别主要如下：**
 
 1、https协议需要到ca申请证书，一般免费证书较少，因而需要一定费用。

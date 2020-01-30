@@ -1,2 +1,0 @@
-bash start.sh attendance.jar
-tailf nohup.out

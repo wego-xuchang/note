@@ -1,2 +1,2 @@
-bash start.sh attendance.jar
+bash start.sh fsnsh.jar
 tailf nohup.out

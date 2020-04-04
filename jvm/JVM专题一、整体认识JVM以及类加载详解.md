@@ -1,18 +1,4 @@
-## 整体认识JVM以及类加载详解
-
-### 快速开始
-
- 
-
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps1.png) 
-
- 
-
- 
-
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps2.jpg) 
-
- 
+## JVM专题一、整体认识JVM以及类加载详解
 
 ### JVM虚拟机体系构成
 
@@ -171,7 +157,7 @@ Jdk1.8及之后： 无永久代，常量池在元空间
 
 官方解释：移除永久代是为融合HotSpot JVM与 JRockit VM而做出的努力，因为JRockit没有永久代，不需要配置永久代
 
-### JVM执行原理：
+## JVM执行原理：
 
 ### JVM指令集详解：
 
@@ -201,7 +187,7 @@ pop,pop2,dup,dup2,dup_xl,dup2_xl,dup_x2,dup2_x2,swap
 
 **运算与转换：**
 
-加：iadd,ladd,fadd,dadd
+• 加：iadd,ladd,fadd,dadd
 
 • 减：is ,ls ,fs ,ds
 
@@ -249,7 +235,7 @@ goto,goto_w,jsr,jsr_w,ret
 
 ### JVM运行原理详解：
 
-课上详解
+晚点
 
  
 

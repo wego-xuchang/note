@@ -4,8 +4,6 @@
 
  
 
- 
-
 ![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps3.jpg)![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps4.jpg) 
 
  
@@ -54,8 +52,6 @@
 static变量的赋值操作+static代码块
 按照出现的先后顺序来组装。
 注意:1 static变量的内存分配和初始化是在准备阶段.2 一个类可以是很多个线程同时并发执行，JVM会加锁保证单一性，所以不要在static代码块中搞一些耗时操作。避免线程阻塞。
-
- 
 
  
 

@@ -6,7 +6,7 @@
 
 ![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps3.jpg)![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps4.jpg) 
 
- 
+ JVM的体系结构：四大块，类装载子系统（class loader subsystem），执行引擎子系统（Executionengine子系统），垃圾回收系统（gc），运行时数据区（JVM内存）。
 
 ### Java虚拟机产品：
 
@@ -287,10 +287,6 @@ goto,goto_w,jsr,jsr_w,ret
  
 
 ### JVM运行原理详解：
-
-晚点
-
- 
 
 ### 栈：
 

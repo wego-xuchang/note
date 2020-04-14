@@ -288,6 +288,16 @@ AA,BB,CC
 
 
 
+```java
+ArrayList<ProductProcessDrawbackDto> collect = records1.stream().collect(Collectors.collectingAndThen(
+                        Collectors.toCollection(() -> new TreeSet<>(
+                                Comparator.comparing(
+                                        ProductProcessDrawbackDto::getId))), ArrayList::new));
+
+```
+
+
+
 #### sorted(排序)
 
 Stream<T> sorted();

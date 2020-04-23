@@ -1,20 +1,21 @@
 # JVM专题二、内存分配与回收算法与垃圾收集器详解
 
- 
-
-## JVM虚拟机堆详解
+ ## JVM虚拟机堆详解
 
 学习思路按如下步骤。
 
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps13.jpg) 
 
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps14.jpg) 
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC80LzYvMTcxNGVmODYyZDg1Y2MxZQ?x-oss-process=image/format,png)
+
+
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC80LzYvMTcxNGVmODliOTkxNzlhZA?x-oss-process=image/format,png)
 
  
 
 ## JVM内存分配：
 
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps15.jpg) 
+
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC80LzYvMTcxNGVmOGQwYjhjODJmNA?x-oss-process=image/format,png)
 
  
 
@@ -28,9 +29,9 @@ Java 堆是垃圾收集器管理的主要区域，因此也被称作**GC 堆（G
 
 **堆空间的基本结构：**
 
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps16.jpg) 
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC80LzYvMTcxNGVmOTEzYWQ5NzNhZQ?x-oss-process=image/format,png)
 
-###  **对象优先在 eden 区分配**
+### **对象优先在 eden 区分配**
 
 目前主流的垃圾收集器都会采用**分代回收算法**，因此需要将堆内存分为新生代和老年代，这样我们就可以根据各个年代的特点选择合适的垃圾收集算法。
 
@@ -88,7 +89,8 @@ Java 堆是垃圾收集器管理的主要区域，因此也被称作**GC 堆（G
 
 ## GC判断策略
 
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps17.jpg) 
+
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC80LzYvMTcxNGVmOTYwNmI5ODA3Yg?x-oss-process=image/format,png)
 
 ### 1、引用计数
 
@@ -96,13 +98,15 @@ Java 堆是垃圾收集器管理的主要区域，因此也被称作**GC 堆（G
 
 **这个方法实现简单，效率高，但是目前主流的虚拟机中并没有选择这个算法来管理内存**，其最主要的原因是它很难解决对象之间相互循环引用的问题。 所谓对象之间的相互引用问题，如下面代码所示：除了对象 objA 和 objB 相互引用着对方之外，这两个对象之间再无任何引用。但是他们因为互相引用对方，导致它们的引用计数器都不为 0，于是引用计数算法无法通知 GC 回收器回收他们。
 
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps18.jpg) 
+
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC80LzYvMTcxNGVmOWI2ZTcwMTJkMQ?x-oss-process=image/format,png)
 
 ### 2、跟节点可达性
 
 这个算法的基本思想就是通过一系列的称为 “GC Roots” 的对象作为起点，从这些节点开始向下搜索，节点所走过的路径称为引用链，当一个对象到 GC Roots 没有任何引用链相连的话，则证明此对象是不可用的。
 
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps19.png) 
+
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC80LzYvMTcxNGVmOWVhMWMxNjQ2ZA?x-oss-process=image/format,png) 
 
 #### **再谈引用**
 
@@ -148,19 +152,22 @@ JDK1.2 以后，Java 对引用的概念进行了扩充，将引用分为强引�
 
 ## JVM垃圾收集算法
 
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps20.jpg) 
+
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC80LzYvMTcxNGVmYTQzOTVhOGQ0OQ?x-oss-process=image/format,png)
 
 ### 1、复制算法
 
 2、为了解决效率问题，“复制”收集算法出现了。它可以将内存分为大小相同的两块，每次使用其中的一块。当这一块的内存使用完后，就将还存活的对象复制到另一块去，然后再把使用的空间一次清理掉。这样就使每次的内存回收都是对内存区间的一半进行回收。
 
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps21.jpg) 
+
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC80LzYvMTcxNGVmYTc4M2NhNDVhMA?x-oss-process=image/format,png)
 
 ### 2、标记整理
 
 根据老年代的特点提出的一种标记算法，标记过程仍然与“标记-清除”算法一样，但后续步骤不是直接对可回收对象回收，而是让所有存活的对象向一端移动，然后直接清理掉端边界以外的内存。
 
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps22.jpg) 
+
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC80LzYvMTcxNGVmYWEzNmVlZjAwNQ?x-oss-process=image/format,png)
 
  
 
@@ -172,7 +179,8 @@ JDK1.2 以后，Java 对引用的概念进行了扩充，将引用分为强引�
 
 **空间问题（标记清除后会产生大量不连续的碎片）**
 
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps23.jpg) 
+
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC80LzYvMTcxNGVmYWQ5YjU4Zjk4OA?x-oss-process=image/format,png)
 
  
 
@@ -184,7 +192,8 @@ JDK1.2 以后，Java 对引用的概念进行了扩充，将引用分为强引�
 
 ## GC收集器
 
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps24.jpg) 
+
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC80LzYvMTcxNGVmYjBkOTkwZmJjNA?x-oss-process=image/format,png) 
 
 **如果说收集算法是内存回收的方法论，那么垃圾收集器就是内存回收的具体实现。**
 
@@ -196,7 +205,8 @@ Serial（串行）收集器收集器是最基本、历史最悠久的垃圾收�
 
 **新生代采用复制算法，老年代采用标记-整理算法。** 
 
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps25.png) 
+
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC80LzYvMTcxNGVmYjNkY2E4M2VlZQ?x-oss-process=image/format,png)
 
 虚拟机的设计者们当然知道 Stop The World 带来的不良用户体验，所以在后续的垃圾收集器设计中停顿时间在不断缩短（仍然还有停顿，寻找最优秀的垃圾收集器的过程仍然在继续）。
 
@@ -208,7 +218,8 @@ ParNew 收集器其实就是 Serial 收集器的多线程版本，除了使用�
 
 新生代采用复制算法，老年代采用标记-整理算法。
 
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps26.png) 
+
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC80LzYvMTcxNGVmYjdkYzRlMjgyZg?x-oss-process=image/format,png)
 
 它是许多运行在 Server 模式下的虚拟机的首要选择，除了 Serial 收集器外，只有它能与 CMS 收集器（真正意义上的并发收集器，后面会介绍到）配合工作。
 
@@ -272,7 +283,7 @@ CMS 处理过程有七个步骤：
 
  
 
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps27.png) 
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC80LzYvMTcxNGVmYmNiZDg2MjcwOQ?x-oss-process=image/format,png)
 
 从它的名字就可以看出它是一款优秀的垃圾收集器，
 
@@ -302,7 +313,7 @@ G1 (Garbage-First) 是一款面向服务器的垃圾收集器,主要针对配备
 
  
 
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps28.jpg) 
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC80LzYvMTcxNGVmYmZmYmU4MTYzZg?x-oss-process=image/format,png)
 
  
 
@@ -360,7 +371,8 @@ G1收集器一次GC的运作过程大致分为以下几个步骤：
 
 *筛选回收（Cleanup，STW）：筛选回收阶段首先对各个Region的回收价值和成本进行排序，根据用户所期望的GC停顿时间(可以用JVM参数 -XX:MaxGCPauseMillis指定)来制定回收计划，比如说老年代此时有1000个Region都满了，但是因为根据预期停顿时间，本次垃圾回收可能只能停顿200毫秒，那么通过之前回收成本计算得知，可能回收其中800个Region刚好需要200ms，那么就只会回收800个Region，尽量把GC导致的停顿时间控制在我们指定的范围内。这个阶段其实也可以做到与用户程序一起并发执行，但是因为只回收一部分Region，时间是用户可控制的，而且停顿用户线程将大幅提高收集效率。不管是年轻代或是老年代，回收算法主要用的是复制算法，将一个region中的存活对象复制到另一个region中，这种不会像CMS那样回收完因为有很多内存碎片还需要整理一次，G1采用复制算法回收几乎不会有太多内存碎片。
 
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps29.png) 
+
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC80LzYvMTcxNGVmYzQwNDc2Zjg1MQ?x-oss-process=image/format,png) 
 
  
 

@@ -1,10 +1,7 @@
 ## JVM专题一、整体认识JVM以及类加载详解
 
 ### JVM虚拟机体系构成
-
- 
-
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps3.jpg)![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps4.jpg) 
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC80LzQvMTcxNDU5OGMwMGFkODEyZA?x-oss-process=image/format,png)![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC80LzQvMTcxNDU5OTUwNjc2OTYzOA?x-oss-process=image/format,png)
 
  JVM的体系结构：四大块，类装载子系统（class loader subsystem），执行引擎子系统（Executionengine子系统），垃圾回收系统（gc），运行时数据区（JVM内存）。
 
@@ -16,7 +13,7 @@
 
 ### 类加载机制详解:
 
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps5.png) 
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC80LzQvMTcxNDU5Y2Y2ZTllMjA1ZQ?x-oss-process=image/format,png)
 
 加载》验证》准备》解析》初始化
 
@@ -153,7 +150,7 @@ static变量的赋值操作+static代码块
 
 沙箱机制是由基于双亲委派机制上采取的一种JVM的自我保护机制，假设你要写一个java.lang.String 的类，由于双亲委派机制的原理，此请求会先交给Bootstrap试图进行加载，但是Bootstrap在加载类时首先通过包和类名查找rt.jar中有没有该类，有则优先加载rt.jar包中的类，因此就保证了java的运行机制不会被破坏。
 
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps6.jpg) 
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC80LzQvMTcxNDU5YTJiZjBhZDE1OA?x-oss-process=image/format,png)
 
  我们看到，前面3个类加载和默认的一致，CommonClassLoader、CatalinaClassLoader、SharedClassLoader、WebappClassLoader 和JasperClassLoader则是Tomcat自己定义的类加载器，它们分别加载/common/*、/server/*、/shared/*（在tomcat 6之后已经合并到根目录下的lib目录下）和/WebApp/WEB-INF/*中的Java类库。其中WebApp类加载器和Jsp类加载器通常会存在多个实例，每一个Web应用程序对应一个WebApp类加载器，每一个JSP文件对应一个Jsp类加载器。
 
@@ -170,19 +167,21 @@ tomcat 为了实现隔离性，没有遵守这个约定，每个webappClassLoade
 
 ### 类字节码详解:
 
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps7.jpg) 
 
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps8.jpg) 
 
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps9.jpg) 
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC80LzQvMTcxNDU5YWU4ODMwZWM2MA?x-oss-process=image/format,png)
 
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps10.jpg) 
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC80LzQvMTcxNDU5YjFiNzI0YjNhYQ?x-oss-process=image/format,png)
 
- 
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC80LzQvMTcxNDU5YmE2NzFlZDQxYg?x-oss-process=image/format,png)
+
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC80LzQvMTcxNDU5YmVmMjg4ODA5MQ?x-oss-process=image/format,png)
+
+
 
 ### JVM运行：
 
-![img](file:///C:\Users\xuchang\AppData\Local\Temp\ksohtml612\wps11.jpg) 
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC80LzQvMTcxNDU5YzMyZDlhOTMyYg?x-oss-process=image/format,png)
 
 **本地方法栈(线程私有)**：登记native方法，在Execution Engine执行时加载本地方法库
 
@@ -325,8 +324,6 @@ goto,goto_w,jsr,jsr_w,ret
 执行引擎遇到任意一个方法返回的字节码指令:传递给上层的方法调用者，是否有返回值和返回值类型将根据遇到何种方法来返回指令决定，这种退出的方法称为正常完成出口。
 
 方法执行过程中遇到异常： 无论是java虚拟机内部产生的异常还是代码中throw出的异常，只要在本方法的异常表中没有搜索到匹配的异常处理器，就会导致方法退出，这种退出的方式称为异常完成出口，一个方法若使用该方式退出，是不会给上层调用者任何返回值的。无论使用那种方式退出方法，都要返回到方法被调用的位置，程序才能继续执行。方法返回时可能会在栈帧中保存一些信息，用来恢复上层方法的执行状态。一般方法正常退出的时候，调用者的pc计数器的值可以作为返回地址，帧栈中很有可能会保存这个计数器的值作为返回地址。方法退出的过程就是栈帧在虚拟机栈上的出栈过程，因此退出时的操作可能有：恢复上层方法的局部变量表和操作数栈，把返回值压入调用者的操作数栈每条整pc计数器的值指向调用该方法的后一条指令。
-
- 
 
 
 

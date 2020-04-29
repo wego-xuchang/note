@@ -202,3 +202,51 @@ private List<String> getOrgFilterResult(List<String> organizationIds) {
     }
 ```
 
+这种方式不可以，出现多个同级的父
+
+```java
+private List<OrganizationDataResult> getOrgsResult(List<String> organizationIds,List<OrganizationResultDTO> organizationResultList,Map<String,OrganizationResultDTO> organizationMap) {
+        if (CollectionUtils.isEmpty(organizationIds)){
+            return new ArrayList<>();
+        }
+        try {
+            List<OrganizationDataResult> result= new ArrayList<>();
+            for (String orgId : organizationIds){
+                if (organizationMap.containsKey(orgId)){
+                    OrganizationResultDTO organizationResult = organizationMap.get(orgId);
+                    OrganizationDataResult subDataOrg = new OrganizationDataResult();
+                    subDataOrg.setParentId(organizationResult.getParentId());
+                    subDataOrg.setName(organizationResult.getName());
+                    subDataOrg.setId(organizationResult.getId());
+                    subDataOrg.setType(FsnshConstants.RoleDataDetailTypeEnum.ORG.getCode());
+                    subDataOrg.setLabel(FsnshConstants.ProductLabelEnum.ORG.getCode());
+                    String pid = organizationResult.getParentId();
+//                    result.add(subDataOrg);
+
+                    while (!StringUtils.isEmpty(pid)){
+                        if (organizationMap.containsKey(pid)){
+                            OrganizationResultDTO parentResult = organizationMap.get(pid);
+                            OrganizationDataResult parentDataOrg = new OrganizationDataResult();
+                            parentDataOrg.setParentId(parentResult.getParentId());
+                            parentDataOrg.setName(parentResult.getName());
+                            parentDataOrg.setId(parentResult.getId());
+                            parentDataOrg.setType(FsnshConstants.RoleDataDetailTypeEnum.ORG.getCode());
+                            parentDataOrg.setLabel(FsnshConstants.ProductLabelEnum.ORG.getCode());
+                            pid = parentResult.getParentId();
+                            parentDataOrg.getChildren().add(subDataOrg);
+
+                            subDataOrg = parentDataOrg;
+                        }
+                    }
+                    result.add(subDataOrg);
+                }
+            }
+            return result;
+        } catch (Exception e) {
+            this.logger.error("根据条件查询组织机构或部门信息失败，原因：", e);
+            throw new AppException(e);
+        }
+
+    }
+```
+

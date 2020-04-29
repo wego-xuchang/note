@@ -28,11 +28,51 @@
 
 （3）锁降级：遵循获取写锁、获取读锁再释放写锁的次序，写锁能够降级成为读锁。
 
+```java
+public class AtomicityLock {
+ 
+	private int count = 0;
+	Lock lock = new ReentrantLock();
+	private void increase() {
+		lock.lock();
+		try {
+			count++;
+		} finally {
+			lock.unlock();
+		}
+	}
+ 
+	public static void main(String[] args) {
+		Long time = System.currentTimeMillis();
+		final AtomicityLock atomicityLock = new AtomicityLock();
+		for (int i = 0; i < 10; i++) {
+			new Thread(new Runnable() {
+				public void run() {
+					for (int j = 0; j < 10000000; j++) {
+						atomicityLock.increase();
+					}
+				}
+			}).start();
+		}
+		while (Thread.activeCount() > 1) {
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		System.out.println("运行时间:" + (System.currentTimeMillis() - time));
+		System.out.println("ReentrantLock(可重入锁):" + atomicityLock.count);
+	}
+	
+}
+```
+
+
+
 **二、源码解读**
 
 我们先来看下 ReentrantReadWriteLock 类的整体结构：
-
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
 public class ReentrantReadWriteLock implements ReadWriteLock, java.io.Serializable {
@@ -76,8 +116,6 @@ public class ReentrantReadWriteLock implements ReadWriteLock, java.io.Serializab
 }
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
-
 1、类的继承关系
 
 ```
@@ -109,7 +147,7 @@ abstract static class Sync extends AbstractQueuedSynchronizer {}
 
 Sync类内部存在两个内部类，分别为HoldCounter和ThreadLocalHoldCounter，其中HoldCounter主要与读锁配套使用，其中，HoldCounter源码如下。
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ```
 // 计数器
@@ -122,11 +160,9 @@ static final class HoldCounter {
 }
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
-
 说明：HoldCounter主要有两个属性，count和tid，其中count表示某个读线程重入的次数，tid表示该线程的tid字段的值，该字段可以用来唯一标识一个线程。ThreadLocalHoldCounter的源码如下
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ```
 // 本地线程计数器
@@ -139,13 +175,9 @@ static final class ThreadLocalHoldCounter
 }
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
-
 说明：ThreadLocalHoldCounter重写了ThreadLocal的initialValue方法，ThreadLocal类可以将线程与对象相关联。在没有进行set的情况下，get到的均是initialValue方法里面生成的那个HolderCounter对象。
 
 （3）类的属性
-
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
 abstract static class Sync extends AbstractQueuedSynchronizer {
@@ -170,13 +202,13 @@ abstract static class Sync extends AbstractQueuedSynchronizer {
 }
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 说明：该属性中包括了读锁、写锁线程的最大量。本地线程计数器等。
 
 （4）类的构造函数
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ```
 // 构造函数
@@ -188,7 +220,7 @@ Sync() {
 }
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 说明：在Sync的构造函数中设置了本地线程计数器和AQS的状态state。
 
@@ -224,7 +256,7 @@ Sync() {
 
 看下WriteLock类中的lock和unlock方法：
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ```
 public void lock() {
@@ -236,13 +268,13 @@ public void unlock() {
 }
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 可以看到就是调用的独占式同步状态的获取与释放，因此真实的实现就是Sync的 tryAcquire和 tryRelease。
 
 **写锁的获取，看下tryAcquire：**
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ```
  1 protected final boolean tryAcquire(int acquires) {
@@ -281,7 +313,7 @@ public void unlock() {
 34 }
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 其中exclusiveCount方法表示占有写锁的线程数量，源码如下：
 
@@ -309,7 +341,7 @@ static int exclusiveCount(int c) { return c & EXCLUSIVE_MASK; }
 
 **写锁的释放，tryRelease方法：**
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ```
  1 protected final boolean tryRelease(int releases) {
@@ -330,7 +362,7 @@ static int exclusiveCount(int c) { return c & EXCLUSIVE_MASK; }
 16 }
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
    写锁的释放过程还是相对而言比较简单的：首先查看当前线程是否为写锁的持有者，如果不是抛出异常。然后检查释放后写锁的线程数是否为0，如果为0则表示写锁空闲了，释放锁资源将锁的持有线程设置为null，否则释放仅仅只是一次重入锁而已，并不能将写锁的线程清空。
 
@@ -344,7 +376,7 @@ static int exclusiveCount(int c) { return c & EXCLUSIVE_MASK; }
 
 **读锁的获取，看下tryAcquireShared方法**
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ```
  1 protected final int tryAcquireShared(int unused) {
@@ -396,7 +428,7 @@ static int exclusiveCount(int c) { return c & EXCLUSIVE_MASK; }
 47 }
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
  其中sharedCount方法表示占有读锁的线程数量，源码如下：
 
@@ -414,7 +446,7 @@ static int sharedCount(int c)    { return c >>> SHARED_SHIFT; }
 
 fullTryAcquireShared方法：
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ```
 final int fullTryAcquireShared(Thread current) {
@@ -470,13 +502,13 @@ final int fullTryAcquireShared(Thread current) {
 }
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 说明：在tryAcquireShared函数中，如果下列三个条件不满足（读线程是否应该被阻塞、小于最大值、比较设置成功）则会进行fullTryAcquireShared函数中，它用来保证相关操作可以成功。其逻辑与tryAcquireShared逻辑类似，不再累赘。
 
 **读锁的释放，tryReleaseShared方法**
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ```
  1 protected final boolean tryReleaseShared(int unused) {
@@ -519,7 +551,7 @@ final int fullTryAcquireShared(Thread current) {
 38 }
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
    说明：此方法表示读锁线程释放锁。首先判断当前线程是否为第一个读线程firstReader，若是，则判断第一个读线程占有的资源数firstReaderHoldCount是否为1，若是，则设置第一个读线程firstReader为空，否则，将第一个读线程占有的资源数firstReaderHoldCount减1；若当前线程不是第一个读线程，那么首先会获取缓存计数器（上一个读锁线程对应的计数器 ），若计数器为空或者tid不等于当前线程的tid值，则获取当前线程的计数器，如果计数器的计数count小于等于1，则移除当前线程对应的计数器，如果计数器的计数count小于等于0，则抛出异常，之后再减少计数即可。无论何种情况，都会进入无限循环，该循环可以确保成功设置状态state。其流程图如下。
 
@@ -531,7 +563,7 @@ final int fullTryAcquireShared(Thread current) {
 
 先看读锁获取锁的部分：
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ```
 if (r == 0) {//r == 0，表示第一个读锁线程，第一个读锁firstRead是不会加入到readHolds中
@@ -550,7 +582,7 @@ if (r == 0) {//r == 0，表示第一个读锁线程，第一个读锁firstRead�
 }
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ​    这里为什么要搞一个firstRead、firstReaderHoldCount呢？而不是直接使用else那段代码？这是为了一个效率问题，firstReader是不会放入到readHolds中的，如果读锁仅有一个的情况下就会避免查找readHolds。可能就看这个代码还不是很理解HoldCounter。我们先看firstReader、firstReaderHoldCount的定义：
 
